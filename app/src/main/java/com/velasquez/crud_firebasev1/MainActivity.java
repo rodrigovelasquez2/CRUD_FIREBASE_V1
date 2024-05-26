@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -16,13 +17,22 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.velasquez.crud_firebasev1.models.Persona;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
+
+    private List<Persona> listPersona = new ArrayList<Persona>();
+    ArrayAdapter<Persona> arrayAdapterPersona;
+
     EditText editTextNombre, editTextApellido, editTextEmail, editTextPassword;
     ListView listView;
 
@@ -46,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        Inicializar Firebase:
         inicializarFirebase();
+        listarDatosFirebase();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -63,8 +74,30 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("Firebase", "Error" + e.getMessage());
         }
-
     }//Fin inicializarFirebase
+
+    public void listarDatosFirebase() {
+        databaseReference.child("Persona").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listPersona.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Persona p = ds.getValue(Persona.class);
+                    listPersona.add(p);
+
+                    //Llenar el arrayu adapter:
+                    arrayAdapterPersona = new ArrayAdapter<Persona>(MainActivity.this, android.R.layout.simple_list_item_1,listPersona);
+                    listView.setAdapter(arrayAdapterPersona);
+                }//Fin for
+            }//Fin onDataChange
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }//Fin  onCancelled
+        });
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -103,15 +136,14 @@ public class MainActivity extends AppCompatActivity {
 
 
                         databaseReference.child("Persona").child(p.getUid()).setValue(p);
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         Log.e("Firebase", "Error" + e.getMessage());
                     }
 
                     Toast.makeText(this, "Agregar", Toast.LENGTH_SHORT).show();
                     limpiarCajas();
-                    break;
-
                 }
+                break;
             case R.id.icon_save:
                 Toast.makeText(this, "Guardar", Toast.LENGTH_SHORT).show();
                 break;

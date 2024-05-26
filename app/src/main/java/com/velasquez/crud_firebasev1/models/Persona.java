@@ -8,21 +8,18 @@ public class Persona {
     private String contrasena;
 
 
-
     public Persona() {
     }
 
-    public Persona(String uid, String nombre, String apellido, String correo,String contrasena) {
+    public Persona(String uid, String nombre, String apellido, String correo, String contrasena) {
         this.uid = uid;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
-        this.contrasena=contrasena;
+        this.contrasena = contrasena;
     }
 
 //Get and setters:
-
-
 
 
     public String getUid() {
@@ -71,6 +68,6 @@ public class Persona {
 
     @Override
     public String toString() {
-        return "nombre='" + nombre;
+        return "nombre= " + nombre + "\napellido= "+apellido+ "\ncorreo= "+correo;
     }
 }//Fin Persona
