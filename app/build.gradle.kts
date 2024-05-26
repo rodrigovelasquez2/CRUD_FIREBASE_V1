@@ -39,6 +39,8 @@ dependencies {
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation("com.google.firebase:firebase-analytics")
 
+    // Use AndroidX libraries
+    implementation("com.google.android.material:material:1.6.0")
 
     implementation(libs.appcompat)
     implementation(libs.material)

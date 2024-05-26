@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CRUD_FirebaseV1</string>
+    <string name="app_nombre">Nombre</string>
+    <string name="app_apellido">Apellido</string>
+    <string name="app_correo">Correo</string>
+    <string name="app_contraseña">Contraseña</string>
+    <string name="app_list_personas">Lista de personas</string>
+
 </resources>
