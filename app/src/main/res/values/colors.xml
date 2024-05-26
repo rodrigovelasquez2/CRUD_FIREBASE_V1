@@ -3,4 +3,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#3590F3</color>
+
+
+    <color name="gris_Dark">#333333</color>
+    <color name="turquesa">#48e5c2</color>
+    <color name="gris">#fcfaf9</color>
+    <color name="Tolbar">#6750A4</color>
 </resources>
