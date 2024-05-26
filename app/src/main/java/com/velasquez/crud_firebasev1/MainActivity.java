@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
+    // Persona:
+    Persona personaSelected;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +62,22 @@ public class MainActivity extends AppCompatActivity {
 //        Inicializar Firebase:
         inicializarFirebase();
         listarDatosFirebase();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+               // Esto hace que al hacer clic sobre un elemento de la lista, se muestren sus datos en los campos de texto:
+                personaSelected = (Persona) adapterView.getItemAtPosition(position);
+
+                // para luego poder editarlos:
+                editTextNombre.setText(personaSelected.getNombre());
+                editTextApellido.setText(personaSelected.getApellido());
+                editTextEmail.setText(personaSelected.getCorreo());
+                editTextPassword.setText(personaSelected.getContrasena());
+
+
+            }//Fin onItemClick
+        });//Fin OnItemClickListener
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -87,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     listPersona.add(p);
 
                     //Llenar el arrayu adapter:
-                    arrayAdapterPersona = new ArrayAdapter<Persona>(MainActivity.this, android.R.layout.simple_list_item_1,listPersona);
+                    arrayAdapterPersona = new ArrayAdapter<Persona>(MainActivity.this, android.R.layout.simple_list_item_1, listPersona);
                     listView.setAdapter(arrayAdapterPersona);
                 }//Fin for
             }//Fin onDataChange
@@ -146,7 +167,21 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.icon_save:
-                Toast.makeText(this, "Guardar", Toast.LENGTH_SHORT).show();
+                Persona p = new Persona();
+
+                // Esto hace que se actualice el objeto Persona con los datos que se ingresaron en las cajas de texto:
+                // se obtiene cada elemento de la caja de texto y se asigna a la propiedad del objeto Persona:
+                p.setUid(personaSelected.getUid());
+                p.setNombre(editTextNombre.getText().toString().trim());
+                p.setApellido(editTextApellido.getText().toString().trim());
+                p.setCorreo(editTextEmail.getText().toString().trim());
+                p.setContrasena(editTextPassword.getText().toString().trim());
+
+                //Esto hace que se actualice el objeto Persona en la base de datos, a travez de la referencia a la tabla Persona y al ID del objeto Persona:
+                databaseReference.child("Persona").child(p.getUid()).setValue(p);
+
+                Toast.makeText(this, "Actualizado...", Toast.LENGTH_SHORT).show();
+                limpiarCajas();
                 break;
             case R.id.icon_delete:
                 Toast.makeText(this, "Eliminar", Toast.LENGTH_SHORT).show();
