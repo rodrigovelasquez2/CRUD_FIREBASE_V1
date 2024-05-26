@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1094954591254",
+    "firebase_url": "https://crud-firebasev1-default-rtdb.firebaseio.com",
+    "project_id": "crud-firebasev1",
+    "storage_bucket": "crud-firebasev1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094954591254:android:9abb9d5e82ef1fee548137",
+        "android_client_info": {
+          "package_name": "om.velasquez.crud_firebasev1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQNVbtb-Z21P1D3AZVg79bK7uc_MEogn0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
