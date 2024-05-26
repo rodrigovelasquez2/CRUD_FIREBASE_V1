@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1094954591254:android:9abb9d5e82ef1fee548137",
         "android_client_info": {
-          "package_name": "om.velasquez.crud_firebasev1"
+          "package_name": "com.velasquez.crud_firebasev1"
         }
       },
       "oauth_client": [],
