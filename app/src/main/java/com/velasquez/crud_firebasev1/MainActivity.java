@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-               // Esto hace que al hacer clic sobre un elemento de la lista, se muestren sus datos en los campos de texto:
+                // Esto hace que al hacer clic sobre un elemento de la lista, se muestren sus datos en los campos de texto:
                 personaSelected = (Persona) adapterView.getItemAtPosition(position);
 
                 // para luego poder editarlos:
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
     }//Fin oncreate
+
 
     private void inicializarFirebase() {
         try {
@@ -184,6 +185,12 @@ public class MainActivity extends AppCompatActivity {
                 limpiarCajas();
                 break;
             case R.id.icon_delete:
+                p = new Persona();
+                p.setUid(personaSelected.getUid());
+                databaseReference.child("Persona").child(p.getUid()).removeValue();
+                limpiarCajas();
+
+
                 Toast.makeText(this, "Eliminar", Toast.LENGTH_SHORT).show();
                 break;
             default:
@@ -218,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
         if (contraseña.equals("")) {
             editTextPassword.setError("Required");
         }
-
 
     }//Fin validacion
 }//Fin MainActivity
