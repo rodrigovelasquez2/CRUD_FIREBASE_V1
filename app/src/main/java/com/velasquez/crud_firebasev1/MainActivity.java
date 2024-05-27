@@ -140,31 +140,41 @@ public class MainActivity extends AppCompatActivity {
                 if (nombre.equals("") || apellido.equals("") || correo.equals("") || contraseña.equals("")) {
                     validacion();
                 } else {
+                    // Consulta para verificar si el correo ya existe en la base de datos
+                    databaseReference.child("Persona").orderByChild("correo").equalTo(correo).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                // Si el correo ya existe, muestra un mensaje de error
+                                Toast.makeText(MainActivity.this, "El correo ya está registrado", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Si el correo no existe, agrega el nuevo objeto Persona a la base de datos
+                                try {
+                                    // Creación del objeto Persona
+                                    Persona p = new Persona();
+                                    p.setUid(UUID.randomUUID().toString()); // Generar un ID único
+                                    p.setNombre(nombre);
+                                    p.setApellido(apellido);
+                                    p.setCorreo(correo);
+                                    p.setContrasena(contraseña);
 
-                    try {
-                        //Creacion del objeto Persona:
-                        Persona p = new Persona();
-                        p.setUid(UUID.randomUUID().toString()); //Generar un ID unico
-                        p.setNombre(nombre);
-                        p.setApellido(apellido);
-                        p.setCorreo(correo);
-                        p.setContrasena(contraseña);
+                                    // Agregar el objeto Persona a la base de datos
+                                    databaseReference.child("Persona").child(p.getUid()).setValue(p);
+                                } catch (Exception e) {
+                                    Log.e("Firebase", "Error: " + e.getMessage());
+                                }
 
-                        /**
-                         * @param: databaseReference es la referencia a la base de datos de Firebase Realtime Database
-                         * @param : p es el objeto Persona que se quiere agregar a la base de datos
-                         * @param: p.getUid() es el ID que se genero para el objeto Persona
-                         * @param: child(" Persona ") es la referencia a la tabla Persona de la base de datos, nodo hijo que estara dentro de la ubicacion actual de la base de datos
-                         */
+                                Toast.makeText(MainActivity.this, "Dato agregado", Toast.LENGTH_SHORT).show();
+                                limpiarCajas();
+                            }
+                        }
 
-
-                        databaseReference.child("Persona").child(p.getUid()).setValue(p);
-                    } catch (Exception e) {
-                        Log.e("Firebase", "Error" + e.getMessage());
-                    }
-
-                    Toast.makeText(this, "Agregar", Toast.LENGTH_SHORT).show();
-                    limpiarCajas();
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Manejo de errores
+                            Log.e("Firebase", "Error: " + databaseError.getMessage());
+                        }
+                    });
                 }
                 break;
             case R.id.icon_save:
